@@ -16,7 +16,21 @@ const app  = express();
 const PORT = process.env.PORT || 4000;
 
 // ── MIDDLEWARE ─────────────────────────────────────────────────────────────────
-app.use(cors({ origin: process.env.CLIENT_URL || 'http://localhost:3000', credentials: true }));
+const ALLOWED_ORIGINS = [
+  'http://localhost:3000',
+  'https://sba-online.vercel.app',
+  process.env.CLIENT_URL,
+].filter(Boolean);
+
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow requests with no origin (e.g. curl, mobile apps, Render health checks)
+    if (!origin) return callback(null, true);
+    if (ALLOWED_ORIGINS.includes(origin)) return callback(null, true);
+    return callback(new Error(`CORS: origin ${origin} not allowed`));
+  },
+  credentials: true,
+}));
 app.use(express.json({ limit: '5mb' })); // 5 MB for logo uploads
 
 // ── GOOGLE SHEETS AUTH ────────────────────────────────────────────────────────

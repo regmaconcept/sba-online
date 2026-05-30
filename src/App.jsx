@@ -16,7 +16,7 @@ export const AppContext = createContext(null);
 export const useApp = () => useContext(AppContext);
 
 // Base API URL — change this to your deployed server URL in production
-export const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:4000/api';
+export const API_BASE = process.env.REACT_APP_API_URL || 'https://sba-school-server.onrender.com/api';
 
 // Helper: make authenticated API calls
 export async function apiFetch(path, options = {}) {
@@ -41,8 +41,8 @@ export default function App() {
     try { return JSON.parse(sessionStorage.getItem('sba_user')); } catch { return null; }
   });
   const [school, setSchool] = useState(null);
-  const [term, setTerm]   = useState(() => sessionStorage.getItem('sba_term') || 'ONE');
-  const [year, setYear]   = useState(() => sessionStorage.getItem('sba_year') || new Date().getFullYear().toString());
+  const [term, setTerm] = useState(() => sessionStorage.getItem('sba_term') || 'ONE');
+  const [year, setYear] = useState(() => sessionStorage.getItem('sba_year') || new Date().getFullYear().toString());
 
   useEffect(() => { if (user) loadSchool(); }, [user]);
 
@@ -71,14 +71,14 @@ export default function App() {
           <Route path="/login" element={user ? <Navigate to="/" /> : <LoginPage />} />
           <Route path="/" element={user ? <Layout /> : <Navigate to="/login" />}>
             <Route index element={<Dashboard />} />
-            <Route path="students"   element={<StudentsPage />} />
-            <Route path="teachers"   element={<TeachersPage />} />
-            <Route path="marks"      element={<MarksEntryPage />} />
+            <Route path="students" element={<StudentsPage />} />
+            <Route path="teachers" element={<TeachersPage />} />
+            <Route path="marks" element={<MarksEntryPage />} />
             <Route path="attendance" element={<AttendancePage />} />
-            <Route path="conduct"    element={<ConductPage />} />
-            <Route path="rawscores"  element={<RawScoresPage />} />
-            <Route path="reports"    element={<ReportCardsPage />} />
-            <Route path="settings"   element={<SettingsPage />} />
+            <Route path="conduct" element={<ConductPage />} />
+            <Route path="rawscores" element={<RawScoresPage />} />
+            <Route path="reports" element={<ReportCardsPage />} />
+            <Route path="settings" element={<SettingsPage />} />
           </Route>
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
